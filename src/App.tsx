@@ -107,7 +107,7 @@ export default function App() {
       )}
 
       {/* OVERVIEW */}
-      <div className="sp-grid">
+      <div className="sp-grid sp-grid--overview">
         <OverviewTile
           label="CPU"
           value={snapshot ? formatPercent(snapshot.cpu.usagePercent) : "—"}
@@ -134,7 +134,6 @@ export default function App() {
           label="UPTIME"
           value={snapshot ? formatUptime(snapshot.uptimeSeconds) : "—"}
           raw
-          wide
         />
       </div>
 
@@ -389,20 +388,22 @@ function OverviewTile({
   percent,
   severity,
   raw,
-  wide,
 }: {
   label: string;
   value: string;
   percent?: number;
   severity?: "ok" | "warn" | "crit";
   raw?: boolean;
-  wide?: boolean;
 }) {
   return (
-    <div className={clsx("sp-card sp-card--compact", wide ? "sp-col-4" : "sp-col-3")}>
+    <div className="sp-card sp-card--compact">
       <span className="sp-label">{label}</span>
       <span className="sp-stat sp-stat--lg">{value}</span>
-      {!raw && percent != null && <Bar percent={percent} variant={severity ?? "severity"} thin />}
+      {!raw && percent != null ? (
+        <Bar percent={percent} variant={severity ?? "severity"} thin />
+      ) : (
+        <div className="sp-bar sp-bar--thin" style={{ visibility: "hidden" }} />
+      )}
     </div>
   );
 }
